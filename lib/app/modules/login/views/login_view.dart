@@ -95,7 +95,9 @@ class LoginView extends GetView<LoginController> {
                 const Center(child: Text('- OR -')),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    controller.loginWithFacebook();
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -110,7 +112,9 @@ class LoginView extends GetView<LoginController> {
                 ),
                 const SizedBox(height: 10),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    controller.loginWithGoogle();
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
