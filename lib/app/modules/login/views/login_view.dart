@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -35,9 +36,7 @@ class LoginView extends GetView<LoginController> {
                       ],
                     ),
                     GestureDetector(
-                      onTap: () {
-                        // الانتقال إلى صفحة التسجيل
-                      },
+                      onTap: () => Get.toNamed(Routes.SIGN_UP),
                       child: Text(
                         'Sign Up',
                         style: GoogleFonts.inter(

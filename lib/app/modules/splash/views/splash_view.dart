@@ -3,10 +3,24 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/splash_controller.dart';
 
-class SplashView extends GetView<SplashController> {
+class SplashView extends StatefulWidget {
   const SplashView({super.key});
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(milliseconds: 900), () {
+      Get.offNamed('/login'); // أو Routes.LOGIN إذا كنت تستخدم app_routes.dart
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
@@ -14,34 +28,23 @@ class SplashView extends GetView<SplashController> {
       systemNavigationBarColor: Colors.transparent,
     );
     SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
-    // SystemChrome.setEnabledSystemUIMode(
-    //   SystemUiMode.manual,
-    //   overlays: [SystemUiOverlay.top],
-    // );
-
     return Scaffold(
-      // backgroundColor: Colors.white,
       body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/splash_bg.png"),
-                fit: BoxFit.fill,
+        fit: StackFit.expand,
+        children: [
+          Image.asset("assets/images/splash_bg.png", fit: BoxFit.cover),
+          SafeArea(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(58.0),
+                child: const CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
-          // Align(
-          //   alignment: Alignment.bottomCenter,
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(56.0),
-          //     child: controller.getStorge.read('id') == null
-          //         ? const CircularProgressIndicator(
-          //             strokeWidth: 3,
-          //           )
-          //         : Container(),
-          //   ),
-          // ),
         ],
       ),
     );
