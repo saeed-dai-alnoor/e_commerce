@@ -15,7 +15,9 @@ class CheckoutView extends GetView<CheckoutController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Checkout'),
+        title: Obx(
+          () => Text(controller.stepIndex.value == 2 ? 'Summary' : 'Checkout'),
+        ),
         automaticallyImplyLeading: false,
         leading: IconButton(
           onPressed: () => Get.back(),

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
-
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
@@ -24,8 +23,8 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
+      statusBarColor: Colors.white,
+      systemNavigationBarColor: Colors.white,
     );
     SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
     return Scaffold(

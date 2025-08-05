@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
@@ -68,6 +67,7 @@ class AppPages {
       page: () => const AccountView(),
       binding: AccountBinding(),
     ),
+   
 
     GetPage(
       name: _Paths.CHECKOUT,

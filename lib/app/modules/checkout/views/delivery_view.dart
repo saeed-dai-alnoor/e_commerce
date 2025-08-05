@@ -6,16 +6,17 @@ import 'package:get/get.dart';
 import '../controllers/checkout_controller.dart';
 
 class DeliveryView extends GetView<CheckoutController> {
- const  DeliveryView({super.key});
-  
+  const DeliveryView({super.key});
+
   @override
   Widget build(BuildContext context) {
-  final steps = ['Delivery', 'Address', 'Summary'];  
+    final steps = ['Delivery', 'Address', 'Summary'];
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           const SizedBox(height: 50),
+          // للدوائر بتاعت المراحل
           Row(
             children: List.generate(steps.length, (index) {
               final isActive = index == 0;
@@ -97,7 +98,7 @@ class DeliveryView extends GetView<CheckoutController> {
               );
             }),
           ),
-          // ⬅️ هنا الشريط العلوي (نفس الموجود عندك)
+
           const SizedBox(height: 40),
           customRadioTile(
             title: 'Standard Delivery',
@@ -120,23 +121,21 @@ class DeliveryView extends GetView<CheckoutController> {
             groupValue: controller.selectedOption,
           ),
           const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                onPressed: () => controller.stepIndex.value++,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF00C569),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      3,
-                    ), // <-- هنا تتحكم في الاستدارة
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 23, horizontal: 57),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: ElevatedButton(
+              onPressed: () => controller.stepIndex.value++,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF00C569),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    3,
+                  ), // <-- هنا تتحكم في الاستدارة
                 ),
-                child: Text('NEXT', style: TextStyle(color: Colors.white)),
+                padding: EdgeInsets.symmetric(vertical: 23, horizontal: 57),
               ),
-            ],
+              child: Text('NEXT', style: TextStyle(color: Colors.white)),
+            ),
           ),
         ],
       ),
