@@ -120,19 +120,6 @@ class AddressView extends GetView<CheckoutController> {
             child: ListView(
               shrinkWrap: true,
               children: [
-                // TextFormField(
-                //   controller: addressController,
-                //   decoration: InputDecoration(
-                //     labelText: 'Your Address',
-                //     border: OutlineInputBorder(),
-                //   ),
-                //   validator: (val) {
-                //     if (val == null || val.isEmpty) {
-                //       return 'Please enter your address';
-                //     }
-                //     return null;
-                //   },
-                // ),
                 TextFormField(
                   controller: controller.street1Controller,
 
@@ -141,7 +128,7 @@ class AddressView extends GetView<CheckoutController> {
                     labelText: 'Street 1',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: controller.street2Controller,
 
@@ -150,7 +137,7 @@ class AddressView extends GetView<CheckoutController> {
                     labelText: 'Street 2',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: controller.cityController,
 
@@ -159,7 +146,7 @@ class AddressView extends GetView<CheckoutController> {
                     labelText: 'City',
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     SizedBox(
