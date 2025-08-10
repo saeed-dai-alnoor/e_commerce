@@ -1,9 +1,9 @@
-import 'package:e_commerce_app/app/data/models/product.dart';
+import 'package:e_commerce_app/app/data/models/product/all_products_model.dart';
 import 'package:e_commerce_app/app/modules/home/controllers/home_controller.dart';
 import 'package:get/get.dart';
 
 class CategoryResultController extends GetxController {
-  final filteredProducts = <Product>[].obs;
+  var filteredProducts =  <AllProductsModel>[].obs;
   late String category;
   // استلام التصنيف من الصفحة السابقة
   // final Product selectedProduct = Get.arguments;

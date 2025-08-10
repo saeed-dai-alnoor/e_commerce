@@ -12,7 +12,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
     final product = controller.product;
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(
           MediaQuery.of(context).size.height * 0.25,
@@ -35,21 +35,15 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   // صورة المنتج في المنتصف
                   Expanded(
                     child: Center(
-                      child: Container(
+                      child: Image.network(
                         width: 300,
                         height: 300,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.transparent,
-                          image: DecorationImage(
-                            image: AssetImage(controller.product.image),
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        // child: Image.asset(controller.product.image),
+                        controller.product.imgUrl,
+                        fit: BoxFit.fill,
                       ),
                     ),
                   ),
+
                   // أيقونة النجمة
                   Obx(
                     () => GestureDetector(
@@ -99,9 +93,9 @@ class ProductDetailView extends GetView<ProductDetailController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Name:   ${product.title}"),
+                  Text("Name:   ${product.name}"),
                   const SizedBox(height: 8),
-                  Text("Title:   ${product.title}"),
+                  Text("Description:   ${product.description}"),
                   const SizedBox(height: 8),
                   Text("Category:   ${product.category}"),
                   const SizedBox(height: 8),

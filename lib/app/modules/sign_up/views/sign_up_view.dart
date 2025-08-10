@@ -97,6 +97,7 @@ class SignUpView extends GetView<SignUpController> {
                             controller.isPasswordVisible.value
                                 ? Icons.visibility
                                 : Icons.visibility_off,
+                            color: Colors.grey,
                           ),
                           onPressed: controller.togglePasswordVisibility,
                         ),
@@ -145,7 +146,6 @@ class SignUpView extends GetView<SignUpController> {
                                 "SIGN UP",
                                 style: const TextStyle(color: Colors.white),
                               ),
-                       
                       ),
                     ),
                   ),

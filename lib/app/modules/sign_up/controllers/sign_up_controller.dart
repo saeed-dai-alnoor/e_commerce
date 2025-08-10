@@ -1,5 +1,5 @@
-import 'package:e_commerce_app/app/data/models/user_model.dart';
-import 'package:e_commerce_app/app/data/repositories/signup_repository.dart';
+import 'package:e_commerce_app/app/data/models/auth/sign_up_model.dart';
+import 'package:e_commerce_app/app/data/repositories/auth/signup_repository.dart';
 import 'package:e_commerce_app/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,32 +20,32 @@ class SignUpController extends GetxController {
   final isPasswordVisible = false.obs;
 
   final repository = SignupRepository();
-  final getStorage = GetStorage();
-
   // Toggle password visibility
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;
   }
 
   void signup() async {
+    final storage = GetStorage();
     // Check if form is valid before proceeding
     if (!signUpFormKey.currentState!.validate()) {
       return;
     }
-
     isLoading.value = true;
-
-    final user = UserModel(
+    final userData = SignUpModel(
       name: nameController.text,
       email: emailController.text,
       password: passwordController.text,
     );
 
     try {
-      final response = await repository.signupUser(user);
-      Get.snackbar("Success", "User signup successfully!");
+      final response = await repository.signupUser(userData);
+      final token = response.data['token'];
       print(response.data);
-      Get.toNamed(Routes.HOME);
+      print("Token: $token");
+      storage.write('token', token);
+      Get.snackbar("Success", "User signup successfully!");
+      Get.offAllNamed(Routes.HOME);
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
@@ -11,6 +12,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/product_dashboard/bindings/product_dashboard_binding.dart';
+import '../modules/product_dashboard/views/product_dashboard_view.dart';
 import '../modules/product_detail/bindings/product_detail_binding.dart';
 import '../modules/product_detail/views/product_detail_view.dart';
 import '../modules/sign_up/bindings/sign_up_binding.dart';
@@ -67,12 +70,15 @@ class AppPages {
       page: () => const AccountView(),
       binding: AccountBinding(),
     ),
-   
-
     GetPage(
       name: _Paths.CHECKOUT,
       page: () => CheckoutView(),
       binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_DASHBOARD,
+      page: () => const ProductDashboardView(),
+      binding: ProductDashboardBinding(),
     ),
   ];
 }

@@ -24,7 +24,7 @@ class MyCustomCard extends StatelessWidget {
           aspectRatio: 0.75, // ✅ نسبة العرض إلى الارتفاع ثابتة
           child: ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.asset(imagePath, fit: BoxFit.contain),
+            child: Image.network(imagePath, fit: BoxFit.fill  ),
           ),
         ),
         const SizedBox(height: 8),
@@ -50,4 +50,3 @@ class MyCustomCard extends StatelessWidget {
     );
   }
 }
-

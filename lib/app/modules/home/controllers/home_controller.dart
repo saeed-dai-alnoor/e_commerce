@@ -1,88 +1,68 @@
-import 'package:e_commerce_app/app/data/models/product.dart';
+import 'dart:convert';
+
+import 'package:e_commerce_app/app/data/models/product/all_products_model.dart';
+import 'package:e_commerce_app/app/data/repositories/product/all_products_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:web_socket_channel/io.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class HomeController extends GetxController {
+  // late IOWebSocketChannel channel;
+  late IO.Socket socket;
+
+  var isLoading = true.obs;
+
+  final AllProductsRepository repository = AllProductsRepository();
+  var allProducts = <AllProductsModel>[].obs;
+  var filteredProducts = <AllProductsModel>[].obs;
+
   var selectedIndex = 0.obs;
   late PageController pageController;
   final searchController = TextEditingController();
+
+  Future<void> fetchProducts() async {
+    try {
+      isLoading.value = true; // بداية التحميل
+      final productsFromApi = await repository.fetchAllProducts();
+      allProducts.value = productsFromApi;
+      filteredProducts.value = productsFromApi;
+    } catch (e) {
+      // هنا ممكن تضيف رسالة خطأ تظهر للمستخدم
+      print("Error fetching products: $e");
+      Get.snackbar("Error", e.toString());
+    } finally {
+      isLoading.value = false; // انتهى التحميل
+    }
+  }
+
   List<String> get uniqueCategories {
     return allProducts.map((p) => p.category).toSet().toList();
   }
 
-  final allProducts = <Product>[
-    Product(
-      name: "Men",
-      title: "one",
-      image: "assets/images/menShoe.png",
-      price: "\$${'23'}",
-      category: "Men",
-    ),
-    Product(
-      name: "Deo Play",
-      title: "two",
-      image: "assets/images/deoPlay.png",
-      price: "\$${'23'}",
-      category: "Men",
-    ),
-    Product(
-      name: "Dask Lamp",
-      title: "Three",
-      image: "assets/images/daskLamp.png",
-      price: "\$${'23'}",
-      category: "Men",
-    ),
-    Product(
-      name: "Phonecase",
-      title: "four",
-      image: "assets/images/phoneCase.png",
-      price: "\$${'23'}",
-      category: "Men",
-    ),
-    Product(
-      name: "Watch",
-      title: "five",
-      image: "assets/images/watch.png",
-      price: "\$${'23'}",
-      category: "Men",
-    ),
-    Product(
-      name: "Women",
-      title: "six",
-      image: "assets/images/womenShoe.png",
-      price: "\$${'23'}",
-      category: "Women",
-    ),
-    Product(
-      name: "Devices",
-      title: "seven",
-      image: "assets/images/devices.png",
-      price: "\$${'23'}",
-      category: "Devices",
-    ),
-    Product(
-      name: "Gadgets",
-      title: "eight",
-      image: "assets/images/gadgets.png",
-      price: "\$${'23'}",
-      category: "Gadgets",
-    ),
-    Product(
-      name: "Games",
-      title: "nine",
-      image: "assets/images/gaming.png",
-      price: "\$${'23'}",
-      category: "Games",
-    ),
-  ];
-  // المنتجات المعروضة حسب البحث
-  var filteredProducts = <Product>[].obs;
+  List<AllProductsModel> get productsWithoutFirstOfEachCategory {
+    Map<String, bool> categoryFirstSeen = {};
+    List<AllProductsModel> filtered = [];
+
+    for (var product in allProducts) {
+      if (categoryFirstSeen[product.category] == true) {
+        // لو شفنا الفئة قبل كدا، نضيف المنتج
+        filtered.add(product);
+      } else {
+        // أول مرة نشوف الفئة، نعلم بس ما نضيف المنتج
+        categoryFirstSeen[product.category] = true;
+      }
+    }
+
+    return filtered;
+  }
+
   void onSearch(String query) {
     if (query.isEmpty) {
       filteredProducts.value = allProducts;
     } else {
       filteredProducts.value = allProducts
-          .where((p) => p.name.contains(query))
+          .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
   }
@@ -97,11 +77,65 @@ class HomeController extends GetxController {
     super.onInit();
     filteredProducts.value = allProducts;
     pageController = PageController(initialPage: selectedIndex.value);
+    fetchProducts(); // استدعي هنا جلب المنتجات من API
+
+    // فتح اتصال WebSocket
+    // channel = IOWebSocketChannel.connect(
+    //   'wss://wanted-elk-publicly.ngrok-free.app:5000',
+    // );
+
+    // channel.stream.listen(
+    //   (message) async {
+    //     final data = jsonDecode(message);
+
+    //     switch (data['action']) {
+    //       case 'create':
+    //       case 'update':
+    //       case 'delete':
+    //         // أي تغيير يأتي من السيرفر، أعِد جلب كامل البيانات من API لتحديث القوائم
+    //         await fetchProducts();
+    //         break;
+
+    //       default:
+    //         break;
+    //     }
+    //   },
+    //   onError: (error) {
+    //     print('WebSocket error: $error');
+    //   },
+    // );
+    // إعداد اتصال socket.io
+    socket = IO.io(
+      'https://wanted-elk-publicly.ngrok-free.app', // بدون بورت، لأنه socket.io يشتغل على نفس البورت الافتراضي 5000
+      IO.OptionBuilder()
+          .setTransports(['websocket']) // استخدام بروتوكول websocket فقط
+          .enableAutoConnect()
+          .build(),
+    );
+
+    socket.onConnect((_) {
+      print('Socket connected');
+    });
+
+    socket.on('productUpdated', (data) async {
+      print('Received product update: $data');
+      await fetchProducts(); // إعادة تحميل المنتجات عند أي تحديث
+    });
+
+    socket.onDisconnect((_) {
+      print('Socket disconnected');
+    });
+
+    socket.onError((error) {
+      print('Socket error: $error');
+    });
   }
 
   @override
   void onClose() {
     super.onClose();
+    // channel.sink.close();
+    socket.dispose();
     searchController.dispose();
   }
 }

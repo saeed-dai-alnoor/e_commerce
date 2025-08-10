@@ -1,25 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:get/get.dart';
+import '../controllers/splash_controller.dart';
 
-class SplashView extends StatefulWidget {
-  const SplashView({super.key});
-
-  @override
-  State<SplashView> createState() => _SplashViewState();
-}
-
-class _SplashViewState extends State<SplashView> {
-  @override
-  void initState() {
-    super.initState();
-
-    Future.delayed(const Duration(milliseconds: 900), () {
-      Get.offNamed('/login'); // أو Routes.LOGIN إذا كنت تستخدم app_routes.dart
-    });
-  }
-
+class SplashView extends GetView<SplashController> {
+ const  SplashView({super.key});
   @override
   Widget build(BuildContext context) {
     final mySystemTheme = SystemUiOverlayStyle.dark.copyWith(
