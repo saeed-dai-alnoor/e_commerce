@@ -1,10 +1,10 @@
-import 'package:e_commerce_app/app/data/models/product.dart';
+import 'package:e_commerce_app/app/data/models/product/all_products_model.dart';
 import 'package:e_commerce_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CartItemCard extends StatelessWidget {
-  final Product product;
+  final AllProductsModel product;
 
   const CartItemCard({super.key, required this.product});
 
@@ -20,8 +20,8 @@ class CartItemCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                product.image,
+              child: Image.network(
+                product.imgUrl,
                 height: 120,
                 width: 120,
                 fit: BoxFit.cover,
@@ -33,7 +33,7 @@ class CartItemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.title,
+                    product.name,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -41,11 +41,14 @@ class CartItemCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    product.title,
+                    // السعر = سعر المنتج * الكمية
+                    '\$${(product.price * product.quantity).toStringAsFixed(2)}',
+
                     style: const TextStyle(color: Colors.grey),
                   ),
                   const SizedBox(height: 10),
                   Container(
+                    width: 120,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -53,21 +56,21 @@ class CartItemCard extends StatelessWidget {
                     ),
                     height: 40,
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.remove),
-                          onPressed: controller.decrement,
+                          onPressed: () => controller.decrement(product),
                         ),
-                        Obx(
-                          () => Text(
-                            '${controller.count}',
-                            style: const TextStyle(fontSize: 18),
-                          ),
+
+                        Text(
+                          '${product.quantity}',
+                          style: const TextStyle(fontSize: 18),
                         ),
+
                         IconButton(
                           icon: const Icon(Icons.add),
-                          onPressed: controller.increment,
+                          onPressed: () => controller.increment(product),
                         ),
                       ],
                     ),

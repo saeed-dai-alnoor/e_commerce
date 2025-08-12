@@ -1,4 +1,4 @@
-import 'dart:convert';
+// ignore_for_file: library_prefixes
 
 import 'package:e_commerce_app/app/data/models/product/all_products_model.dart';
 import 'package:e_commerce_app/app/data/repositories/product/all_products_repository.dart';
@@ -12,6 +12,8 @@ class HomeController extends GetxController {
   late IO.Socket socket;
 
   var isLoading = true.obs;
+  // <-- أضف هذا المتغير الريأكتيفي
+  var searchQuery = ''.obs;
 
   final AllProductsRepository repository = AllProductsRepository();
   var allProducts = <AllProductsModel>[].obs;
@@ -58,13 +60,16 @@ class HomeController extends GetxController {
   }
 
   void onSearch(String query) {
-    if (query.isEmpty) {
+    print('Searching for: $query');
+    searchQuery.value = query;
+    if (query.trim().isEmpty) {
       filteredProducts.value = allProducts;
     } else {
       filteredProducts.value = allProducts
           .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
+    print('Filtered count: ${filteredProducts.length}');
   }
 
   void changePage(int index) {

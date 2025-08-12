@@ -6,8 +6,6 @@ class AddressView extends GetView<CheckoutController> {
   const AddressView({super.key});
   @override
   Widget build(BuildContext context) {
-    final formKeyAddress = GlobalKey<FormState>();
-    final addressController = TextEditingController();
     final steps = ['Delivery', 'Address', 'Summary'];
     int currentStep = 1; // المرحلة الحالية (مثلاً الثانية)
 
@@ -116,67 +114,89 @@ class AddressView extends GetView<CheckoutController> {
           const SizedBox(height: 12),
 
           Form(
-            key: formKeyAddress,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                TextFormField(
-                  controller: controller.street1Controller,
-
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'Street 1',
+            key: controller.formKeyAddress,
+            child: SingleChildScrollView(
+              child: Column(
+                // shrinkWrap: true,
+                children: [
+                  TextFormField(
+                    controller: controller.street1Controller,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Street 1';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(labelText: 'Street 1'),
+                    onChanged: (_) => controller.validateForm(),
                   ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: controller.street2Controller,
-
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'Street 2',
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: controller.street2Controller,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter Street 2';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(labelText: 'Street 2'),
+                    onChanged: (_) => controller.validateForm(),
                   ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: controller.cityController,
-
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelText: 'City',
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: controller.cityController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter City';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(labelText: 'City'),
+                    onChanged: (_) => controller.validateForm(),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 130,
-                      height: 50,
-                      child: TextFormField(
-                        controller: controller.stateController,
-
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          labelText: 'State',
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 130,
+                        height: 50,
+                        child: TextFormField(
+                          controller: controller.stateController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter State';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(labelText: 'State'),
+                          onChanged: (_) => controller.validateForm(),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    SizedBox(
-                      width: 130,
-                      height: 50,
-                      child: TextFormField(
-                        controller: controller.countryController,
-
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          labelText: 'Country',
+                      const SizedBox(width: 12),
+                      SizedBox(
+                        width: 130,
+                        height: 50,
+                        child: TextFormField(
+                          controller: controller.countryController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter Country';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(labelText: 'Country'),
+                          onChanged: (_) => controller.validateForm(),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
           const Spacer(),
@@ -198,24 +218,38 @@ class AddressView extends GetView<CheckoutController> {
                 child: Text('BACK', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (formKeyAddress.currentState!.validate()) {
-                    controller.address.value = addressController.text;
-                    controller.stepIndex.value++;
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF00C569),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      3,
-                    ), // <-- هنا تتحكم في الاستدارة
+              Obx(() {
+                final isFormValid = controller.isFormValid.value;
+                return ElevatedButton(
+                  onPressed: isFormValid
+                      ? () {
+                          // حفظ البيانات
+                          controller.street1.value =
+                              controller.street1Controller.text;
+                          controller.street2.value =
+                              controller.street2Controller.text;
+                          controller.city.value =
+                              controller.cityController.text;
+                          controller.state.value =
+                              controller.stateController.text;
+                          controller.country.value =
+                              controller.countryController.text;
+
+                          controller.stepIndex.value++;
+                        }
+                      : null, // معطل لو الفورم غير صالح
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF00C569),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        3,
+                      ), // <-- هنا تتحكم في الاستدارة
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 23, horizontal: 57),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 23, horizontal: 57),
-                ),
-                child: Text('NEXT', style: TextStyle(color: Colors.white)),
-              ),
+                  child: Text('NEXT', style: TextStyle(color: Colors.white)),
+                );
+              }),
             ],
           ),
         ],

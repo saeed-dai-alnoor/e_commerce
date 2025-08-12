@@ -12,10 +12,6 @@ class SplashBinding extends Bindings {
   void dependencies() {
     Get.put(SplashController());
     // Get.put(HomeController());
-    // Get.put(CartController());
-    // Get.put(CheckoutController());
-    // Get.put(AccountController());
-    // Get.lazyPut<SplashController>(() => SplashController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<CartController>(() => CartController());
     Get.lazyPut<CheckoutController>(() => CheckoutController());

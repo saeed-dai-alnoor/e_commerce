@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+    Get.put(CartController());
   runApp(
     GetMaterialApp(
       title: "E Commerce App",

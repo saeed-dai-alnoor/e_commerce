@@ -2,9 +2,7 @@ import 'package:e_commerce_app/app/routes/app_pages.dart';
 import 'package:e_commerce_app/app/widgets/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
 import 'package:get/get.dart';
-
 import '../controllers/cart_controller.dart';
 
 class CartView extends GetView<CartController> {
@@ -17,7 +15,7 @@ class CartView extends GetView<CartController> {
         padding: const EdgeInsets.all(8.0),
         child: Obx(() {
           if (controller.cartItems.isEmpty) {
-            return const Center(child: Text('السلة فارغة'));
+            return const Center(child: Text('Empty Cart!'));
           }
 
           return ListView.builder(
@@ -25,26 +23,39 @@ class CartView extends GetView<CartController> {
             itemBuilder: (context, index) {
               final product = controller.cartItems[index];
               return Slidable(
-                key: ValueKey(product.name),
+                key: ValueKey(product.id),
                 startActionPane: ActionPane(
                   motion: const ScrollMotion(),
                   children: [
-                    SlidableAction(
-                      onPressed: (_) => controller.addToFavorites(product),
+                    CustomSlidableAction(
+                      onPressed: (_) {
+                        final currentStatus =
+                            controller.favoriteStatus[product.id] ?? false;
+                        controller.favoriteStatus[product.id] =
+                            !currentStatus; // قلب الحالة
+                      },
                       backgroundColor: Colors.yellow,
                       foregroundColor: Colors.white,
-                      icon: Icons.star,
+                      child: Obx(() {
+                        final isFavorite =
+                            controller.favoriteStatus[product.id] ?? false;
+                        return Icon(
+                          Icons.star,
+                          color: isFavorite ? Colors.red : Colors.white,
+                          size: 36,
+                        );
+                      }),
                     ),
                   ],
                 ),
                 endActionPane: ActionPane(
                   motion: const ScrollMotion(),
                   children: [
-                    SlidableAction(
+                    CustomSlidableAction(
                       onPressed: (_) => controller.removeFromCart(product),
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,
-                      icon: Icons.delete,
+                      child: Icon(Icons.delete, color: Colors.white, size: 36),
                     ),
                   ],
                 ),
@@ -62,38 +73,44 @@ class CartView extends GetView<CartController> {
             Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
+
               children: [
                 const Text("Price", style: TextStyle(color: Colors.grey)),
                 const SizedBox(height: 4),
-                Text(
-                  "\$${233}",
-                  style: const TextStyle(
-                    color: Colors.green,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => Text(
+                    "\$${controller.totalPrice.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF00C569),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 22,
+            Obx(() {
+              final  hasItems = controller.cartItems.isNotEmpty;
+              return ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF00C569),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 22,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-              onPressed: () {
-                Get.toNamed(Routes.CHECKOUT);
-              },
-              child: const Text(
-                "CHECKOUT",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+                onPressed: hasItems
+                    ? () {
+                        Get.toNamed(Routes.CHECKOUT);
+                      }
+                    : null, // الزر يكون غير مفعل إذا السلة فاضية
+
+                child: Text("CHECKOUT", style: TextStyle(color: Colors.white)),
+              );
+            }),
           ],
         ),
       ),

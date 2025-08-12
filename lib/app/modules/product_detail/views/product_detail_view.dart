@@ -1,3 +1,4 @@
+import 'package:e_commerce_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -86,10 +87,7 @@ class ProductDetailView extends GetView<ProductDetailController> {
             // تفاصيل المنتج
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                // color: Colors.grey[900],
-                // borderRadius: BorderRadius.circular(10),
-              ),
+              decoration: BoxDecoration(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -100,7 +98,6 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   Text("Category:   ${product.category}"),
                   const SizedBox(height: 8),
                   Text("Price:   \$${product.price}"),
-                  // أضف أي تفاصيل أخرى تريدها هنا
                 ],
               ),
             ),
@@ -142,11 +139,16 @@ class ProductDetailView extends GetView<ProductDetailController> {
                 ),
               ),
               onPressed: () {
-                Get.snackbar(
-                  "تمت الإضافة",
-                  "تمت إضافة المنتج بنجاح",
-                  snackPosition: SnackPosition.BOTTOM,
+                final cartController = Get.find<CartController>();
+
+                cartController.addToCart(
+                  controller.product,
+                  isFavorite: controller
+                      .isFavorite
+                      .value, // حالة النجمة من صفحة التفاصيل
                 );
+                // cartController.addToCart(controller.product);
+                Get.snackbar("Add Successfully", "Add Product Done!");
               },
               child: const Text("ADD", style: TextStyle(color: Colors.white)),
             ),

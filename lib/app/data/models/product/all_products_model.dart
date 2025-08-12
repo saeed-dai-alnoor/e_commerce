@@ -27,6 +27,7 @@ class AllProductsModel {
   bool is_new;
   DateTime date;
   int v;
+  int quantity; // أضف هذا
 
   AllProductsModel({
     required this.id,
@@ -41,6 +42,7 @@ class AllProductsModel {
     required this.is_new,
     required this.date,
     required this.v,
+    this.quantity = 1, // القيمة الافتراضية 1
   });
 
   factory AllProductsModel.fromJson(Map<String, dynamic> json) =>

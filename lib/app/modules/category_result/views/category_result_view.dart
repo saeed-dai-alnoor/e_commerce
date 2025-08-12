@@ -29,12 +29,12 @@ class CategoryResultView extends GetView<CategoryResultController> {
             padding: const EdgeInsets.all(16),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisExtent: 315,
+              mainAxisExtent: 355,
               crossAxisSpacing: 10,
             ),
-            itemCount: controller.filteredProducts.length - 1,
+            itemCount: controller.filteredProducts.length,
             itemBuilder: (context, index) {
-              final product = controller.filteredProducts[index + 1];
+              final product = controller.filteredProducts[index];
               return GestureDetector(
                 onTap: () {
                   Get.toNamed(

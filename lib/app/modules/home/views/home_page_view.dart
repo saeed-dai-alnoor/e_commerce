@@ -28,13 +28,65 @@ class HomePageView extends GetView<HomeController> {
                   onChanged: controller.onSearch,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
-                    border: InputBorder.none,
+                    hintText: 'Search',
+                    border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.symmetric(
                       vertical: 0,
                       horizontal: 16,
                     ),
                   ),
                 ),
+                // القائمة المنسدلة
+                Obx(() {
+                  if (controller.searchQuery.value.isEmpty) {
+                    return SizedBox.shrink(); // لو ما كتبش حاجة → ما نعرضش حاجة
+                  }
+
+                  if (controller.filteredProducts.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("Not Found", style: TextStyle(fontSize: 16)),
+                    );
+                  }
+
+                  return Container(
+                    constraints: const BoxConstraints(
+                      maxHeight: 200,
+                    ), // أقصى طول للقائمة
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controller.filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        final product = controller.filteredProducts[index];
+                        return ListTile(
+                          leading: Image.network(
+                            product.imgUrl,
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ),
+                          title: Text(product.name),
+                          subtitle: Text(product.category),
+                          onTap: () {
+                            // نفضي البحث بعد الاختيار
+                            Future.microtask(() {
+                              controller.searchController.clear();
+                              controller.searchQuery.value = '';
+                              controller.filteredProducts.value =
+                                  controller.allProducts;
+                            });
+
+                            // نروح لصفحة التفاصيل
+                            Get.toNamed(
+                              Routes.PRODUCT_DETAIL,
+                              arguments: product,
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }),
                 const SizedBox(height: 30),
                 Text(
                   'Categories',
