@@ -115,91 +115,94 @@ class AddressView extends GetView<CheckoutController> {
 
           Form(
             key: controller.formKeyAddress,
-            child: SingleChildScrollView(
-              child: Column(
-                // shrinkWrap: true,
-                children: [
-                  TextFormField(
-                    controller: controller.street1Controller,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter Street 1';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(labelText: 'Street 1'),
-                    onChanged: (_) => controller.validateForm(),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: controller.street2Controller,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter Street 2';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(labelText: 'Street 2'),
-                    onChanged: (_) => controller.validateForm(),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: controller.cityController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter City';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(labelText: 'City'),
-                    onChanged: (_) => controller.validateForm(),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 130,
-                        height: 50,
-                        child: TextFormField(
-                          controller: controller.stateController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter State';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(labelText: 'State'),
-                          onChanged: (_) => controller.validateForm(),
+            child: Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: controller.street1Controller,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Street 1';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(labelText: 'Street 1'),
+                      onChanged: (_) => controller.validateForm(),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: controller.street2Controller,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter Street 2';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(labelText: 'Street 2'),
+                      onChanged: (_) => controller.validateForm(),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: controller.cityController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter City';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(labelText: 'City'),
+                      onChanged: (_) => controller.validateForm(),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 130,
+                          height: 50,
+                          child: TextFormField(
+                            controller: controller.stateController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter State';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(labelText: 'State'),
+                            onChanged: (_) => controller.validateForm(),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      SizedBox(
-                        width: 130,
-                        height: 50,
-                        child: TextFormField(
-                          controller: controller.countryController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter Country';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(labelText: 'Country'),
-                          onChanged: (_) => controller.validateForm(),
+                        const SizedBox(width: 12),
+                        SizedBox(
+                          width: 130,
+                          height: 50,
+                          child: TextFormField(
+                            controller: controller.countryController,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter Country';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(labelText: 'Country'),
+                            onChanged: (_) => controller.validateForm(),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const Spacer(),
+          // const Spacer(),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,

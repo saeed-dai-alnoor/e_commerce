@@ -68,9 +68,11 @@ class CartItemCard extends StatelessWidget {
                           style: const TextStyle(fontSize: 18),
                         ),
 
-                        IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () => controller.increment(product),
+                        Expanded(
+                          child: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () => controller.increment(product),
+                          ),
                         ),
                       ],
                     ),

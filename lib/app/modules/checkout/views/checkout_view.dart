@@ -14,6 +14,8 @@ class CheckoutView extends GetView<CheckoutController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset:
+          true, // مهم للسماح بتحريك المحتوى عند ظهور الكيبورد
       appBar: AppBar(
         title: Obx(
           () => Text(controller.stepIndex.value == 2 ? 'Summary' : 'Checkout'),
