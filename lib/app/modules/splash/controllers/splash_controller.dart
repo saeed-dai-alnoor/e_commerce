@@ -26,6 +26,6 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // storge.erase();
+    // GetStorage().erase();
   }
 }

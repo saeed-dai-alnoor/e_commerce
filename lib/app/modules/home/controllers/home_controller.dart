@@ -111,7 +111,8 @@ class HomeController extends GetxController {
     // );
     // إعداد اتصال socket.io
     socket = IO.io(
-      'https://wanted-elk-publicly.ngrok-free.app', // بدون بورت، لأنه socket.io يشتغل على نفس البورت الافتراضي 5000
+      // 'https://wanted-elk-publicly.ngrok-free.app', // بدون بورت، لأنه socket.io يشتغل على نفس البورت الافتراضي 5000
+      'https://e-commerce-api-fgo8.onrender.com',
       IO.OptionBuilder()
           .setTransports(['websocket']) // استخدام بروتوكول websocket فقط
           .enableAutoConnect()

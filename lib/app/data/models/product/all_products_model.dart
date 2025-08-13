@@ -21,7 +21,8 @@ class AllProductsModel {
   int price;
   String category;
   String size;
-  Color color;
+  // Color color;
+  String color;
   String imgUrl;
   bool isBestSelling;
   bool is_new;
@@ -42,7 +43,7 @@ class AllProductsModel {
     required this.is_new,
     required this.date,
     required this.v,
-    this.quantity = 1, // القيمة الافتراضية 1
+    required this.quantity, // القيمة الافتراضية 1
   });
 
   factory AllProductsModel.fromJson(Map<String, dynamic> json) =>
@@ -53,12 +54,13 @@ class AllProductsModel {
         price: json["price"],
         category: json["category"],
         size: json["size"],
-        color: colorValues.map[json["color"]]!,
+        color: json["color"],
         imgUrl: json["imgUrl"],
         isBestSelling: json["isBestSelling"],
         is_new: json["is_new"],
         date: DateTime.parse(json["date"]),
         v: json["__v"],
+        quantity: json["quantity"], // ← الحل هنا
       );
 
   Map<String, dynamic> toJson() => {
@@ -68,27 +70,12 @@ class AllProductsModel {
     "price": price,
     "category": category,
     "size": size,
-    "color": colorValues.reverse[color],
+    "color": color,
     "imgUrl": imgUrl,
     "isBestSelling": isBestSelling,
     "is_new": is_new,
     "date": date.toIso8601String(),
     "__v": v,
+    "quantity": quantity, // لو مش عايز تحفظه في DB ممكن تحذفه
   };
-}
-
-enum Color { GREEN }
-
-final colorValues = EnumValues({"Green": Color.GREEN});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }
