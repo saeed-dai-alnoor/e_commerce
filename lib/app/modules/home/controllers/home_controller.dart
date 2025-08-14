@@ -141,7 +141,7 @@ class HomeController extends GetxController {
   void onClose() {
     super.onClose();
     // channel.sink.close();
-    socket.dispose();
     searchController.dispose();
+    socket.dispose();
   }
 }

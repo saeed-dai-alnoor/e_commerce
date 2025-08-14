@@ -28,8 +28,7 @@ class HomePageView extends GetView<HomeController> {
                   onChanged: controller.onSearch,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.search),
-                    hintText: 'Search',
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(
                       vertical: 0,
                       horizontal: 16,
@@ -41,7 +40,6 @@ class HomePageView extends GetView<HomeController> {
                   if (controller.searchQuery.value.isEmpty) {
                     return SizedBox.shrink(); // لو ما كتبش حاجة → ما نعرضش حاجة
                   }
-
                   if (controller.filteredProducts.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.all(8.0),
@@ -112,29 +110,38 @@ class HomePageView extends GetView<HomeController> {
                             .firstWhere((p) => p.category == category)
                             .imgUrl;
 
-                        return GestureDetector(
-                          onTap: () => Get.toNamed(
-                            Routes.CATEGORY_RESULT,
-                            arguments: category,
-                          ),
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 20),
-                            child: Column(
-                              children: [
-                                Image.network(
-                                  image,
-                                  width: 45,
-                                  height: 45,
-                                  fit: BoxFit.fill,
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () => Get.toNamed(
+                                Routes.CATEGORY_RESULT,
+                                arguments: category,
+                              ),
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 20),
+                                width: 90,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: NetworkImage(image),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                                const SizedBox(height: 8),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                SizedBox(width: 20),
                                 Text(
                                   category,
                                   style: const TextStyle(fontSize: 17),
                                 ),
                               ],
                             ),
-                          ),
+                          ],
                         );
                       }).toList(),
                     ),

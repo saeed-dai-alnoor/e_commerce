@@ -113,10 +113,10 @@ class AddressView extends GetView<CheckoutController> {
           ),
           const SizedBox(height: 12),
 
-          Form(
-            key: controller.formKeyAddress,
-            child: Expanded(
-              child: SingleChildScrollView(
+          Expanded(
+            child: SingleChildScrollView(
+              child: Form(
+                key: controller.formKeyAddress,
                 child: Column(
                   children: [
                     TextFormField(

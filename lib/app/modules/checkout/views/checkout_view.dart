@@ -13,29 +13,33 @@ class CheckoutView extends GetView<CheckoutController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset:
-          true, // مهم للسماح بتحريك المحتوى عند ظهور الكيبورد
-      appBar: AppBar(
-        title: Obx(
-          () => Text(controller.stepIndex.value == 2 ? 'Summary' : 'Checkout'),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        resizeToAvoidBottomInset:
+            true, // مهم للسماح بتحريك المحتوى عند ظهور الكيبورد
+        appBar: AppBar(
+          title: Obx(
+            () =>
+                Text(controller.stepIndex.value == 2 ? 'Summary' : 'Checkout'),
+          ),
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: Icon(CupertinoIcons.back),
+          ),
         ),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(CupertinoIcons.back),
-        ),
-      ),
-      body: Obx(
-        () => Column(
-          children: [
-            Expanded(
-              child: IndexedStack(
-                index: controller.stepIndex.value,
-                children: [DeliveryView(), AddressView(), SummaryView()],
+        body: Obx(
+          () => Column(
+            children: [
+              Expanded(
+                child: IndexedStack(
+                  index: controller.stepIndex.value,
+                  children: [DeliveryView(), AddressView(), SummaryView()],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
