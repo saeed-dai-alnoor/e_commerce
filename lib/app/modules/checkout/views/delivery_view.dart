@@ -100,27 +100,36 @@ class DeliveryView extends GetView<CheckoutController> {
           ),
 
           const SizedBox(height: 40),
-          customRadioTile(
-            title: 'Standard Delivery',
-            subtitle: 'Order will be delivered between 3 - 5 business days',
-            value: DeliveryOption.standard,
-            groupValue: controller.selectedOption,
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  customRadioTile(
+                    title: 'Standard Delivery',
+                    subtitle:
+                        'Order will be delivered between 3 - 5 business days',
+                    value: DeliveryOption.standard,
+                    groupValue: controller.selectedOption,
+                  ),
+                  customRadioTile(
+                    title: 'Next Day Delivery',
+                    subtitle:
+                        'Place your order before 6pm and your items will be delivered the next day',
+                    value: DeliveryOption.nextDay,
+                    groupValue: controller.selectedOption,
+                  ),
+                  customRadioTile(
+                    title: 'Nominated Delivery',
+                    subtitle:
+                        'Pick a particular date from the calendar and order will be delivered on selected date',
+                    value: DeliveryOption.nominated,
+                    groupValue: controller.selectedOption,
+                  ),
+                ],
+              ),
+            ),
           ),
-          customRadioTile(
-            title: 'Next Day Delivery',
-            subtitle:
-                'Place your order before 6pm and your items will be delivered the next day',
-            value: DeliveryOption.nextDay,
-            groupValue: controller.selectedOption,
-          ),
-          customRadioTile(
-            title: 'Nominated Delivery',
-            subtitle:
-                'Pick a particular date from the calendar and order will be delivered on selected date',
-            value: DeliveryOption.nominated,
-            groupValue: controller.selectedOption,
-          ),
-          const Spacer(),
+
           Align(
             alignment: Alignment.bottomRight,
             child: ElevatedButton(
