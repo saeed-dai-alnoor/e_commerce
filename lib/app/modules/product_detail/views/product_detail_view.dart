@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,31 +37,18 @@ class ProductDetailView extends GetView<ProductDetailController> {
                   // صورة المنتج في المنتصف
                   Expanded(
                     child: Center(
-                      child: Image.network(
-                        width: 300,
-                        height: 300,
-                        controller.product.imgUrl,
-                        fit: BoxFit.fill,
-                        loadingBuilder:
-                            (
-                              BuildContext context,
-                              Widget child,
-                              ImageChunkEvent? loadingProgress,
-                            ) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value:
-                                      loadingProgress.expectedTotalBytes != null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.error); // صورة بديلة عند الفشل
-                        },
+                      child: CachedNetworkImage(
+                        imageUrl: controller.product.imgUrl,
+                        placeholder: (context, url) => const Icon(
+                          Icons.image, // أيقونة صورة
+                          size: 60,
+                          color: Colors.grey,
+                        ),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.broken_image, // أيقونة صورة مكسورة
+                          size: 60,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ),

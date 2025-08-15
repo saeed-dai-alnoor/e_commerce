@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/app/modules/home/views/all_products_grid_view_view.dart';
 import 'package:e_commerce_app/app/modules/home/views/downloadin_home_view.dart';
 import 'package:e_commerce_app/app/routes/app_pages.dart';
@@ -56,34 +57,19 @@ class HomePageView extends GetView<HomeController> {
                     itemBuilder: (context, index) {
                       final product = controller.filteredProducts[index];
                       return ListTile(
-                        leading: Image.network(
-                          product.imgUrl,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.cover,
-                          loadingBuilder:
-                              (
-                                BuildContext context,
-                                Widget child,
-                                ImageChunkEvent? loadingProgress,
-                              ) {
-                                if (loadingProgress == null) return child;
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value:
-                                        loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                              loadingProgress
-                                                  .expectedTotalBytes!
-                                        : null,
-                                  ),
-                                );
-                              },
-                          errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error); // صورة بديلة عند الفشل
-                          },
+                        leading: CachedNetworkImage(
+                          imageUrl: product.imgUrl,
+                          fit: BoxFit.fill,
+                          placeholder: (context, url) => const Icon(
+                            Icons.image, // أيقونة صورة
+                            size: 60,
+                            color: Colors.grey,
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.broken_image, // أيقونة صورة مكسورة
+                            size: 60,
+                            color: Colors.grey,
+                          ),
                         ),
                         title: Text(product.name),
                         subtitle: Text(product.category),
@@ -141,14 +127,27 @@ class HomePageView extends GetView<HomeController> {
                               arguments: category,
                             ),
                             child: Container(
-                              margin: const EdgeInsets.only(right: 20),
-                              width: 90,
-                              height: 90,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: NetworkImage(image),
-                                  fit: BoxFit.cover,
+                              margin: EdgeInsets.only(right: 10),
+                              child: ClipOval(
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: CachedNetworkImage(
+                                    imageUrl: image,
+                                    fit: BoxFit.fill,
+                                    placeholder: (context, url) => const Icon(
+                                      Icons.image, // أيقونة صورة
+                                      size: 60,
+                                      color: Colors.grey,
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
+                                          Icons
+                                              .broken_image, // أيقونة صورة مكسورة
+                                          size: 60,
+                                          color: Colors.grey,
+                                        ),
+                                  ),
                                 ),
                               ),
                             ),

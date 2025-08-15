@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -26,7 +27,20 @@ class MyCustomCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             child: Container(
               color: Colors.grey[300],
-              child: Image.network(imagePath, fit: BoxFit.fill),
+              child: CachedNetworkImage(
+                imageUrl: imagePath,
+                fit: BoxFit.fill,
+                placeholder: (context, url) => const Icon(
+                  Icons.image, // أيقونة صورة
+                  size: 60,
+                  color: Colors.grey,
+                ),
+                errorWidget: (context, url, error) => const Icon(
+                  Icons.broken_image, // أيقونة صورة مكسورة
+                  size: 60,
+                  color: Colors.grey,
+                ),
+              ),
             ),
           ),
         ),

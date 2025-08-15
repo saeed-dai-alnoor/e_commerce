@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_app/app/data/models/product/all_products_model.dart';
 import 'package:e_commerce_app/app/modules/cart/controllers/cart_controller.dart';
 import 'package:flutter/material.dart';
@@ -20,30 +21,21 @@ class CartItemCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.network(
-                product.imgUrl,
+              child: CachedNetworkImage(
+                imageUrl: product.imgUrl,
+                width: 100,
                 height: 120,
-                width: 120,
-                fit: BoxFit.cover,
-                loadingBuilder:
-                    (
-                      BuildContext context,
-                      Widget child,
-                      ImageChunkEvent? loadingProgress,
-                    ) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(Icons.error); // صورة بديلة عند الفشل
-                },
+                fit: BoxFit.fill,
+                placeholder: (context, url) => const Icon(
+                  Icons.image, // أيقونة صورة
+                  size: 60,
+                  color: Colors.grey,
+                ),
+                errorWidget: (context, url, error) => const Icon(
+                  Icons.broken_image, // أيقونة صورة مكسورة
+                  size: 60,
+                  color: Colors.grey,
+                ),
               ),
             ),
             const SizedBox(width: 12),
