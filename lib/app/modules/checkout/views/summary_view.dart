@@ -253,9 +253,7 @@ class SummaryView extends GetView<CheckoutController> {
 
                   const SizedBox(width: 12),
                   ElevatedButton(
-                    onPressed: () {
-                      Get.snackbar('Order', 'Order Confirmed!');
-                    },
+                    onPressed: () => controller.createOrderAndPay(),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF00C569),
                       shape: RoundedRectangleBorder(

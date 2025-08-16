@@ -1,9 +1,15 @@
-import 'package:flutter/widgets.dart';
+import 'package:e_commerce_app/app/modules/checkout/views/payment_view.dart';
+import 'package:e_commerce_app/app/modules/splash/controllers/splash_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../data/repositories/order/order_creator_repository.dart';
+import '../../cart/controllers/cart_controller.dart';
 
 class CheckoutController extends GetxController {
   var selectedOption = DeliveryOption.standard.obs;
   final stepIndex = 0.obs;
+  final orderRepo = OrderCreatorRepository();
 
   var isFormValid = false.obs;
   final formKeyAddress = GlobalKey<FormState>();
@@ -20,7 +26,7 @@ class CheckoutController extends GetxController {
   final stateController = TextEditingController();
   final countryController = TextEditingController();
 
-// 🔹 أسعار طرق التوصيل
+  // 🔹 أسعار طرق التوصيل
   final Map<DeliveryOption, double> deliveryPrices = {
     DeliveryOption.standard: 5.0,
     DeliveryOption.nextDay: 15.0,
@@ -47,6 +53,55 @@ class CheckoutController extends GetxController {
   void validateForm() {
     if (formKeyAddress.currentState != null) {
       isFormValid.value = formKeyAddress.currentState!.validate();
+    }
+  }
+
+  Future<void> createOrderAndPay() async {
+    try {
+      final cartController = Get.find<CartController>();
+      final splashController = Get.find<SplashController>();
+      // 🟢 جهز items من الكارت
+      final items = cartController.cartItems.map((product) {
+        return {"productId": product.id, "quantity": product.quantity};
+      }).toList();
+
+      // 🟢 جهز عنوان الشحن
+      final shippingAddress = {
+        "street1": street1.value,
+        "street2": street2.value,
+        "city": city.value,
+        "state": state.value,
+        "country": country.value,
+      };
+
+      // 🟢 هات التوكن (افترض إنك مخزنه في GetStorage مثلاً)
+      final token = splashController.token;
+
+      // 🟢 اعمل الأوردر
+      final orderData = await orderRepo.createOrder(
+        items: items,
+        shippingAddress: shippingAddress,
+        token: token,
+      );
+
+      // 🟢 لو رجع لينك الدفع → افتح صفحة الدفع
+      final paymentUrl = orderData["paymentUrl"];
+      final orderId = orderData["orderId"];
+
+      if (paymentUrl != null) {
+        // افتح صفحة WebView مستقلة
+        Get.to(
+          () => PaymentView(
+            paymentUrl: paymentUrl,
+            orderId: orderId,
+            token: token,
+          ),
+        );
+      } else {
+        Get.snackbar("Order", "Order Created Successfully!");
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString());
     }
   }
 

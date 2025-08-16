@@ -62,7 +62,7 @@ class AllProductsModel {
         date: DateTime.parse(json["date"]),
         v: json["__v"],
         quantity: json["quantity"],
-        stock: json["stock"],
+        stock: json["stock"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

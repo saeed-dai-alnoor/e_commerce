@@ -3,9 +3,7 @@ import 'package:e_commerce_app/app/modules/checkout/views/delivery_view.dart';
 import 'package:e_commerce_app/app/modules/checkout/views/summary_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../controllers/checkout_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
