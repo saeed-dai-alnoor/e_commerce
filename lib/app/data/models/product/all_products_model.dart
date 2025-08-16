@@ -21,14 +21,14 @@ class AllProductsModel {
   int price;
   String category;
   String size;
-  // Color color;
   String color;
   String imgUrl;
   bool isBestSelling;
   bool is_new;
   DateTime date;
   int v;
-  int quantity; // أضف هذا
+  int quantity;
+  int stock; // ✅ الكمية المتاحة في المخزن (من السيرفر)
 
   AllProductsModel({
     required this.id,
@@ -44,6 +44,7 @@ class AllProductsModel {
     required this.date,
     required this.v,
     required this.quantity, // القيمة الافتراضية 1
+    required this.stock,
   });
 
   factory AllProductsModel.fromJson(Map<String, dynamic> json) =>
@@ -60,7 +61,8 @@ class AllProductsModel {
         is_new: json["is_new"],
         date: DateTime.parse(json["date"]),
         v: json["__v"],
-        quantity: json["quantity"], // ← الحل هنا
+        quantity: json["quantity"],
+        stock: json["stock"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -76,6 +78,7 @@ class AllProductsModel {
     "is_new": is_new,
     "date": date.toIso8601String(),
     "__v": v,
-    "quantity": quantity, // لو مش عايز تحفظه في DB ممكن تحذفه
+    "quantity": quantity,
+    "stock": stock,
   };
 }

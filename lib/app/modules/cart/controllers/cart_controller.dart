@@ -47,9 +47,16 @@ class CartController extends GetxController {
     if (existingProduct != null) {
       increment(existingProduct);
     } else {
-      product.quantity = 1; // الكمية الافتراضية
-      favoriteStatus[product.id] = isFavorite;
-      cartItems.add(product);
+      if (product.stock > 0) {
+        product.quantity = 1;
+        favoriteStatus[product.id] = isFavorite;
+        cartItems.add(product);
+      } else {
+        Get.snackbar(
+          "Alert",
+          "The requested quantity is not available in stock",
+        );
+      }
     }
     saveCartToStorage(); // تحديث التخزين بعد الإضافة
   }
@@ -65,9 +72,16 @@ class CartController extends GetxController {
     var existingProduct = cartItems.firstWhereOrNull((p) => p.id == product.id);
 
     if (existingProduct != null) {
-      existingProduct.quantity++;
-      cartItems.refresh();
-      saveCartToStorage();
+      if (existingProduct.quantity < existingProduct.stock) {
+        existingProduct.quantity++;
+        cartItems.refresh();
+        saveCartToStorage();
+      } else {
+        Get.snackbar(
+          "Alert",
+          "The requested quantity is not available in stock",
+        );
+      }
     }
   }
 
