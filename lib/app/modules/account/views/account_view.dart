@@ -34,23 +34,35 @@ class AccountView extends GetView<AccountController> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Colors.grey,
-                                image: const DecorationImage(
-                                  image: AssetImage('assets/images/saeed.jpeg'),
-                                ),
+                                image: controller.userImage.value != null
+                                    ? DecorationImage(
+                                        image: FileImage(
+                                          controller.userImage.value!,
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : const DecorationImage(
+                                        image: AssetImage(
+                                          'assets/images/saeed.jpeg',
+                                        ), // أيقونة شخص افتراضية
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                             const SizedBox(width: 20),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  'Saeed Dai Alnoor',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                              children: [
+                                Obx(
+                                  () => Text(
+                                    controller.userName.value,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                                Text('saeeddaialnoor@gmail.com'),
+                                Obx(() => Text(controller.userEmail.value)),
                               ],
                             ),
                           ],
@@ -59,7 +71,100 @@ class AccountView extends GetView<AccountController> {
                         buildListTile(
                           'Edit Profile',
                           Image.asset('assets/images/edit.png'),
-                          onTap: () {},
+                          onTap: () {
+                            final nameController = TextEditingController(
+                              text: controller.userName.value,
+                            );
+                            final oldPassController = TextEditingController();
+                            final newPassController = TextEditingController();
+
+                            Get.defaultDialog(
+                              title: 'Edit Profile',
+                              content: Column(
+                                children: [
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      controller.pickImage(); // اختيار صورة
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 18,
+                                        horizontal: 13,
+                                      ),
+                                      backgroundColor: Colors.grey[500],
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.image,
+                                      size: 30,
+                                      color: Colors.black,
+                                    ),
+                                    label: const Text(
+                                      'Change Profile Picture',
+                                      style: TextStyle(color: Colors.black45),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  TextField(
+                                    controller: nameController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Name',
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  TextField(
+                                    controller: oldPassController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Old Password',
+                                    ),
+                                    obscureText: true,
+                                  ),
+                                  TextField(
+                                    controller: newPassController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'New Password',
+                                    ),
+                                    obscureText: true,
+                                  ),
+                                  SizedBox(height: 23),
+                                ],
+                              ),
+                              textCancel: 'Cancel', // زر الإلغاء
+                              cancelTextColor: Colors.red,
+                              textConfirm: 'Save',
+                              onConfirm: () {
+                                // تحديث الاسم مباشرة
+                                controller.updateName(nameController.text);
+
+                                // تحديث كلمة السر بعد التحقق
+                                if (oldPassController.text.isNotEmpty &&
+                                    newPassController.text.isNotEmpty) {
+                                  if (controller.checkOldPassword(
+                                    oldPassController.text,
+                                  )) {
+                                    controller.updatePassword(
+                                      newPassController.text,
+                                    );
+                                    Get.snackbar(
+                                      'Success',
+                                      'Password updated successfully',
+                                    );
+                                  } else {
+                                    Get.snackbar(
+                                      'Error',
+                                      'Old password is incorrect',
+                                    );
+                                    return; // إذا كانت كلمة السر القديمة خاطئة، لا يغلق الـ Dialog
+                                  }
+                                }
+
+                                // إغلاق الـ Dialog بعد نجاح التحديث
+                                Get.back();
+                              },
+                            );
+                          },
                         ),
                         buildListTile(
                           'Shipping Address',

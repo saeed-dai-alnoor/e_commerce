@@ -44,6 +44,9 @@ class SignUpController extends GetxController {
       print(response.data);
       print("Token: $token");
       storage.write('token', token);
+      storage.write('name', nameController.text);
+      storage.write('email', emailController.text);
+
       Get.snackbar("Success", "User signup successfully!");
       Get.offAllNamed(Routes.HOME);
     } catch (e) {

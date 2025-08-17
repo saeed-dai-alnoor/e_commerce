@@ -48,6 +48,7 @@ dependencies:
   internet_connection_checker: ^3.0.1
   cached_network_image: ^3.4.1
   webview_flutter: ^4.13.0
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:
